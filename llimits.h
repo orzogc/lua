@@ -108,6 +108,7 @@ typedef LUAI_UACINT l_uacInt;
 
 
 /* type casts (a macro highlights casts in the code) */
+// 类型转换，将 exp 转换为 t 类型
 #define cast(t, exp)	((t)(exp))
 
 #define cast_void(i)	cast(void, (i))

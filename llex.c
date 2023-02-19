@@ -35,7 +35,7 @@
 
 #define currIsNewline(ls)	(ls->current == '\n' || ls->current == '\r')
 
-
+// 保留关键字
 /* ORDER RESERVED */
 static const char *const luaX_tokens [] = {
     "and", "break", "do", "else", "elseif",
@@ -565,4 +565,3 @@ int luaX_lookahead (LexState *ls) {
   ls->lookahead.token = llex(ls, &ls->lookahead.seminfo);
   return ls->lookahead.token;
 }
-

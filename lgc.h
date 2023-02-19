@@ -66,11 +66,13 @@
 */
 #define resetbits(x,m)		((x) &= cast(lu_byte, ~(m)))
 #define setbits(x,m)		((x) |= (m))
+// 测试标记
 #define testbits(x,m)		((x) & (m))
 #define bitmask(b)		(1<<(b))
 #define bit2mask(b1,b2)		(bitmask(b1) | bitmask(b2))
 #define l_setbit(x,b)		setbits(x, bitmask(b))
 #define resetbit(x,b)		resetbits(x, bitmask(b))
+// 测试标记
 #define testbit(x,b)		testbits(x, bitmask(b))
 
 
@@ -78,26 +80,33 @@
 #define WHITE0BIT	0  /* object is white (type 0) */
 #define WHITE1BIT	1  /* object is white (type 1) */
 #define BLACKBIT	2  /* object is black */
-#define FINALIZEDBIT	3  /* object has been marked for finalization */
+#define FINALIZEDBIT	3  /* object has been marked for finalization */ //用于标记没有被引用需要回收的udata
 /* bit 7 is currently used by tests (luaL_checkmemory) */
 
+// 所有白色标记
 #define WHITEBITS	bit2mask(WHITE0BIT, WHITE1BIT)
 
-
+// 是否白色
 #define iswhite(x)      testbits((x)->marked, WHITEBITS)
+// 是否黑色
 #define isblack(x)      testbit((x)->marked, BLACKBIT)
+// 是否灰色
 #define isgray(x)  /* neither white nor black */  \
 	(!testbits((x)->marked, WHITEBITS | bitmask(BLACKBIT)))
 
 #define tofinalize(x)	testbit((x)->marked, FINALIZEDBIT)
 
+// 获取另一种白色标记
 #define otherwhite(g)	((g)->currentwhite ^ WHITEBITS)
 #define isdeadm(ow,m)	(!(((m) ^ WHITEBITS) & (ow)))
+// 是否要回收？
 #define isdead(g,v)	isdeadm(otherwhite(g), (v)->marked)
 
+// 切换白色标记
 #define changewhite(x)	((x)->marked ^= WHITEBITS)
 #define gray2black(x)	l_setbit((x)->marked, BLACKBIT)
 
+// 获取白色标记
 #define luaC_white(g)	cast(lu_byte, (g)->currentwhite & WHITEBITS)
 
 

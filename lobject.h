@@ -19,7 +19,9 @@
 /*
 ** Extra tags for non-values
 */
+// Proto 类型？
 #define LUA_TPROTO	LUA_NUMTAGS		/* function prototypes */
+// 类型总数
 #define LUA_TDEADKEY	(LUA_NUMTAGS+1)		/* removed keys in tables */
 
 /*
@@ -43,6 +45,7 @@
 ** 2 - regular C function (closure)
 */
 
+// 各种类型
 /* Variant tags for functions */
 #define LUA_TLCL	(LUA_TFUNCTION | (0 << 4))  /* Lua closure */
 #define LUA_TLCF	(LUA_TFUNCTION | (1 << 4))  /* light C function */
@@ -50,12 +53,16 @@
 
 
 /* Variant tags for strings */
+// 短字符串类型
 #define LUA_TSHRSTR	(LUA_TSTRING | (0 << 4))  /* short strings */
+// 长字符串类型
 #define LUA_TLNGSTR	(LUA_TSTRING | (1 << 4))  /* long strings */
 
 
 /* Variant tags for numbers */
+// 浮点数类型
 #define LUA_TNUMFLT	(LUA_TNUMBER | (0 << 4))  /* float numbers */
+// 整数类型
 #define LUA_TNUMINT	(LUA_TNUMBER | (1 << 4))  /* integer numbers */
 
 
@@ -71,7 +78,10 @@
 */
 typedef struct GCObject GCObject;
 
-
+// 需要GC的类型的共同字段
+// next 下一个GC链表
+// tt 数据类型
+// marked GC标记
 /*
 ** Common Header for all collectable objects (in macro form, to be
 ** included in other objects)
@@ -94,6 +104,7 @@ struct GCObject {
 ** an actual value plus a tag with its type.
 */
 
+// 所有Lua类型，包含不需要GC的类型
 /*
 ** Union of all Lua values
 */
@@ -106,10 +117,11 @@ typedef union Value {
   lua_Number n;    /* float numbers */
 } Value;
 
-
+// value_ 数据
+// tt_ 数据类型
 #define TValuefields	Value value_; int tt_
 
-
+// Lua类型
 typedef struct lua_TValue {
   TValuefields;
 } TValue;
@@ -119,7 +131,7 @@ typedef struct lua_TValue {
 /* macro defining a nil value */
 #define NILCONSTANT	{NULL}, LUA_TNIL
 
-
+// 获取具体数据 Value
 #define val_(o)		((o)->value_)
 
 
@@ -164,6 +176,7 @@ typedef struct lua_TValue {
 #define fltvalue(o)	check_exp(ttisfloat(o), val_(o).n)
 #define nvalue(o)	check_exp(ttisnumber(o), \
 	(ttisinteger(o) ? cast_num(ivalue(o)) : fltvalue(o)))
+// 获取GC头
 #define gcvalue(o)	check_exp(iscollectable(o), val_(o).gc)
 #define pvalue(o)	check_exp(ttislightuserdata(o), val_(o).p)
 #define tsvalue(o)	check_exp(ttisstring(o), gco2ts(val_(o).gc))
@@ -180,7 +193,7 @@ typedef struct lua_TValue {
 
 #define l_isfalse(o)	(ttisnil(o) || (ttisboolean(o) && bvalue(o) == 0))
 
-
+// 需要GC的类型
 #define iscollectable(o)	(rttype(o) & BIT_ISCOLLECTABLE)
 
 
@@ -193,20 +206,24 @@ typedef struct lua_TValue {
 
 
 /* Macros to set values */
+// 设置数据类型
 #define settt_(o,t)	((o)->tt_=(t))
 
+// 设置浮点数类型
 #define setfltvalue(obj,x) \
   { TValue *io=(obj); val_(io).n=(x); settt_(io, LUA_TNUMFLT); }
 
 #define chgfltvalue(obj,x) \
   { TValue *io=(obj); lua_assert(ttisfloat(io)); val_(io).n=(x); }
 
+// 设置整数类型
 #define setivalue(obj,x) \
   { TValue *io=(obj); val_(io).i=(x); settt_(io, LUA_TNUMINT); }
 
 #define chgivalue(obj,x) \
   { TValue *io=(obj); lua_assert(ttisinteger(io)); val_(io).i=(x); }
 
+// 设置nil类型
 #define setnilvalue(obj) settt_(obj, LUA_TNIL)
 
 #define setfvalue(obj,x) \
@@ -215,6 +232,7 @@ typedef struct lua_TValue {
 #define setpvalue(obj,x) \
   { TValue *io=(obj); val_(io).p=(x); settt_(io, LUA_TLIGHTUSERDATA); }
 
+// 设置bool类型
 #define setbvalue(obj,x) \
   { TValue *io=(obj); val_(io).b=(x); settt_(io, LUA_TBOOLEAN); }
 
@@ -222,6 +240,7 @@ typedef struct lua_TValue {
   { TValue *io = (obj); GCObject *i_g=(x); \
     val_(io).gc = i_g; settt_(io, ctb(i_g->tt)); }
 
+// 设置字符串类型
 #define setsvalue(L,obj,x) \
   { TValue *io = (obj); TString *x_ = (x); \
     val_(io).gc = obj2gco(x_); settt_(io, ctb(x_->tt)); \
@@ -276,6 +295,7 @@ typedef struct lua_TValue {
 #define setobjt2t	setobj
 /* to new object */
 #define setobj2n	setobj
+// 设置字符串类型
 #define setsvalue2n	setsvalue
 
 /* to table (define it as an expression to be used in macros) */
@@ -295,7 +315,7 @@ typedef TValue *StkId;  /* index to stack elements */
 
 
 
-
+// 字符串头，后跟字符串
 /*
 ** Header for string value; string bytes follow the end of this structure
 ** (aligned according to 'UTString'; see next).
@@ -311,7 +331,7 @@ typedef struct TString {
   } u;
 } TString;
 
-
+// 用来计算 TString 的size
 /*
 ** Ensures that address after this type is always fully aligned.
 */
@@ -546,4 +566,3 @@ LUAI_FUNC void luaO_chunkid (char *out, const char *source, size_t len);
 
 
 #endif
-

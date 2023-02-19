@@ -150,7 +150,7 @@ static unsigned int arrayindex (const TValue *key) {
   return 0;  /* 'key' did not match some condition */
 }
 
-
+// 返回表索引
 /*
 ** returns the index of a 'key' for table traversals. First goes all
 ** elements in the array part, then elements in the hash part. The

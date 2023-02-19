@@ -56,28 +56,28 @@ static void LoadBlock (LoadState *S, void *b, size_t size) {
 
 #define LoadVar(S,x)		LoadVector(S,&x,1)
 
-
+// 加载一字节
 static lu_byte LoadByte (LoadState *S) {
   lu_byte x;
   LoadVar(S, x);
   return x;
 }
 
-
+// 加载 int
 static int LoadInt (LoadState *S) {
   int x;
   LoadVar(S, x);
   return x;
 }
 
-
+// 加载浮点数
 static lua_Number LoadNumber (LoadState *S) {
   lua_Number x;
   LoadVar(S, x);
   return x;
 }
 
-
+// 加载整数
 static lua_Integer LoadInteger (LoadState *S) {
   lua_Integer x;
   LoadVar(S, x);
@@ -284,4 +284,3 @@ LClosure *luaU_undump(lua_State *L, ZIO *Z, const char *name) {
   luai_verifycode(L, buff, cl->p);
   return cl;
 }
-

@@ -55,19 +55,30 @@
 typedef struct lua_State lua_State;
 
 
+// Lua基础类型
 /*
 ** basic types
 */
+// 无类型
 #define LUA_TNONE		(-1)
 
+// 空类型
 #define LUA_TNIL		0
+// 布尔类型
 #define LUA_TBOOLEAN		1
+// 指针类型，需要外部管理内存
 #define LUA_TLIGHTUSERDATA	2
+// 数字类型
 #define LUA_TNUMBER		3
+// 字符串类型
 #define LUA_TSTRING		4
+// 表类型
 #define LUA_TTABLE		5
+// 函数类型
 #define LUA_TFUNCTION		6
+// 指针类型，内部管理内存
 #define LUA_TUSERDATA		7
+// Lua虚拟机、协程类型
 #define LUA_TTHREAD		8
 
 #define LUA_NUMTAGS		9
@@ -274,6 +285,8 @@ LUA_API void  (lua_callk) (lua_State *L, int nargs, int nresults,
 
 LUA_API int   (lua_pcallk) (lua_State *L, int nargs, int nresults, int errfunc,
                             lua_KContext ctx, lua_KFunction k);
+
+// 执行字节码
 #define lua_pcall(L,n,r,f)	lua_pcallk(L, (n), (r), (f), 0, NULL)
 
 LUA_API int   (lua_load) (lua_State *L, lua_Reader reader, void *dt,

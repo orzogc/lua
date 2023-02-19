@@ -18,7 +18,7 @@
 #define LUA_ENV		"_ENV"
 #endif
 
-
+// 保留关键字
 /*
 * WARNING: if you change the order of this enumeration,
 * grep "ORDER RESERVED"

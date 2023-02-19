@@ -367,7 +367,7 @@ static int moveresults (lua_State *L, const TValue *firstResult, StkId res,
   return 1;
 }
 
-
+// 恢复到上一次函数调用的环境
 /*
 ** Finishes a function call: calls hook if necessary, removes CallInfo,
 ** moves current number of results to proper place; returns 0 iff call
@@ -762,7 +762,7 @@ static void checkmode (lua_State *L, const char *mode, const char *x) {
   }
 }
 
-
+// 分析代码
 static void f_parser (lua_State *L, void *ud) {
   LClosure *cl;
   struct SParser *p = cast(struct SParser *, ud);
@@ -798,5 +798,3 @@ int luaD_protectedparser (lua_State *L, ZIO *z, const char *name,
   L->nny--;
   return status;
 }
-
-

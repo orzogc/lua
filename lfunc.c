@@ -95,7 +95,7 @@ void luaF_close (lua_State *L, StkId level) {
   }
 }
 
-
+// 新建 Proto
 Proto *luaF_newproto (lua_State *L) {
   GCObject *o = luaC_newobj(L, LUA_TPROTO, sizeof(Proto));
   Proto *f = gco2p(o);
@@ -148,4 +148,3 @@ const char *luaF_getlocalname (const Proto *f, int local_number, int pc) {
   }
   return NULL;  /* not found */
 }
-

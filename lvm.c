@@ -782,7 +782,7 @@ void luaV_finishOp (lua_State *L) {
     Protect(luaV_finishset(L,t,k,v,slot)); }
 
 
-
+// 执行字节码
 void luaV_execute (lua_State *L) {
   CallInfo *ci = L->ci;
   LClosure *cl;
@@ -1319,4 +1319,3 @@ void luaV_execute (lua_State *L) {
 }
 
 /* }================================================================== */
-

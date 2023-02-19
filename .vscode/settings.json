@@ -1,0 +1,14 @@
+{
+    "editor.formatOnSave": false,
+    "files.associations": {
+        "*.tcc": "c",
+        "chrono": "c",
+        "fstream": "c",
+        "iomanip": "c",
+        "istream": "c",
+        "ostream": "c",
+        "*.rh": "c",
+        "numbers": "c",
+        "random": "cpp"
+    }
+}

@@ -44,6 +44,7 @@
 
 #define luaM_malloc(L,s)	luaM_realloc_(L, NULL, 0, (s))
 #define luaM_new(L,t)		cast(t *, luaM_malloc(L, sizeof(t)))
+// 新建数组
 #define luaM_newvector(L,n,t) \
 		cast(t *, luaM_reallocv(L, NULL, 0, n, sizeof(t)))
 
@@ -66,4 +67,3 @@ LUAI_FUNC void *luaM_growaux_ (lua_State *L, void *block, int *size,
                                const char *what);
 
 #endif
-

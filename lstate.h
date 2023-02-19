@@ -72,7 +72,7 @@ struct lua_longjmp;  /* defined in ldo.c */
 #define KGC_NORMAL	0
 #define KGC_EMERGENCY	1	/* gc was forced by an allocation failure */
 
-
+// 字符串hash表
 typedef struct stringtable {
   TString **hash;
   int nuse;  /* number of elements */
@@ -130,7 +130,7 @@ typedef struct CallInfo {
 #define setoah(st,v)	((st) = ((st) & ~CIST_OAH) | (v))
 #define getoah(st)	((st) & CIST_OAH)
 
-
+// 全局状态
 /*
 ** 'global state', shared by all threads of this state
 */
@@ -144,6 +144,7 @@ typedef struct global_State {
   stringtable strt;  /* hash table for strings */
   TValue l_registry;
   unsigned int seed;  /* randomized seed for hashes */
+  // 当前白色类型
   lu_byte currentwhite;
   lu_byte gcstate;  /* state of garbage collector */
   lu_byte gckind;  /* kind of GC running */
@@ -171,7 +172,7 @@ typedef struct global_State {
   TString *strcache[STRCACHE_N][STRCACHE_M];  /* cache for strings in API */
 } global_State;
 
-
+// 每个Lua虚拟机对应一个lua_State结构体
 /*
 ** 'per thread' state
 */
@@ -201,10 +202,10 @@ struct lua_State {
   lu_byte allowhook;
 };
 
-
+// 获取全局状态 global_State
 #define G(L)	(L->l_G)
 
-
+// 所有GC类型的union
 /*
 ** Union of all collectable objects (only for conversions)
 */
@@ -221,6 +222,7 @@ union GCUnion {
 
 #define cast_u(o)	cast(union GCUnion *, (o))
 
+// 将 GCObject 转换为特定类型
 /* macros to convert a GCObject into a specific value */
 #define gco2ts(o)  \
 	check_exp(novariant((o)->tt) == LUA_TSTRING, &((cast_u(o))->ts))
@@ -230,11 +232,13 @@ union GCUnion {
 #define gco2cl(o)  \
 	check_exp(novariant((o)->tt) == LUA_TFUNCTION, &((cast_u(o))->cl))
 #define gco2t(o)  check_exp((o)->tt == LUA_TTABLE, &((cast_u(o))->h))
+// 将 GCObject 转换为 Proto
 #define gco2p(o)  check_exp((o)->tt == LUA_TPROTO, &((cast_u(o))->p))
 #define gco2th(o)  check_exp((o)->tt == LUA_TTHREAD, &((cast_u(o))->th))
 
 
 /* macro to convert a Lua object into a GCObject */
+// 将类型转换为 GCObject
 #define obj2gco(v) \
 	check_exp(novariant((v)->tt) < LUA_TDEADKEY, (&(cast_u(v)->gc)))
 
@@ -250,4 +254,3 @@ LUAI_FUNC void luaE_shrinkCI (lua_State *L);
 
 
 #endif
-

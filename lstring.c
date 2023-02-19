@@ -68,6 +68,7 @@ unsigned int luaS_hashlongstr (TString *ts) {
 /*
 ** resizes the string table
 */
+// 字符串数量过多时重新分配hash桶
 void luaS_resize (lua_State *L, int newsize) {
   int i;
   stringtable *tb = &G(L)->strt;
@@ -143,7 +144,7 @@ static TString *createstrobj (lua_State *L, size_t l, int tag, unsigned int h) {
   return ts;
 }
 
-
+// 新建长字符串，长字符串不缓存
 TString *luaS_createlngstrobj (lua_State *L, size_t l) {
   TString *ts = createstrobj(L, l, LUA_TLNGSTR, G(L)->seed);
   ts->u.lnglen = l;
@@ -160,7 +161,7 @@ void luaS_remove (lua_State *L, TString *ts) {
   tb->nuse--;
 }
 
-
+// 会用字符串表缓存短字符串
 /*
 ** checks whether short string exists and reuses it or creates a new one
 */
@@ -192,7 +193,7 @@ static TString *internshrstr (lua_State *L, const char *str, size_t l) {
   return ts;
 }
 
-
+// 新建字符串，短字符串缓存，长字符串不缓存
 /*
 ** new string (with explicit length)
 */
@@ -245,4 +246,3 @@ Udata *luaS_newudata (lua_State *L, size_t s) {
   setuservalue(L, u, luaO_nilobject);
   return u;
 }
-
